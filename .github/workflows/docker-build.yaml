@@ -1,0 +1,60 @@
+name: Docker build and push
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: bubble
+  GITOPS_REPO: eldoradocodes/kubernetes
+  GITOPS_PATH: websites/bubble/overlays/prod
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build . --file Dockerfile --tag $REGISTRY/$IMAGE_NAME:latest --tag $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+      - name: Log in to the Container registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=$REGISTRY/$IMAGE_NAME
+          docker push $IMAGE_ID --all-tags
+
+  update-k8s-repo:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.GITOPS_REPO }}
+          token: ${{ secrets.REPO_SECRET }}
+          path: gitops
+      - name: Setup kustomize
+        uses: imranismail/setup-kustomize@v2
+        with:
+          kustomize-version: "5.0.1"
+      - name: Update image in k8s repo
+        run: |
+          kustomize edit set image ${{ env.IMAGE_NAME }}=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        working-directory: gitops/${{ env.GITOPS_PATH }}
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Update image to ${{ github.sha }}"
+          git push
+        working-directory: gitops
