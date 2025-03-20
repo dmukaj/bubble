@@ -54,7 +54,7 @@ const SideBar = () => {
       </Button>
 
       <aside
-        className={`opacity-85 fixed top-0 left-0 z-40  w-[70dvw] md:w-[40dvw] lg:w-[30dvw] xl:w-[20dvw] h-screen transition-transform bg-gray-900 p-2
+        className={`opacity-85 fixed top-0 left-0 z-40  w-[70dvw] md:w-[40dvw] lg:w-[30dvw] xl:w-[20dvw] h-screen transition-transform bg-secondary p-2
           ${expand ? "translate-x-0" : "-translate-x-full"} 
           xl:translate-x-0`} // Always visible on sm and above
       >
@@ -72,16 +72,16 @@ const SideBar = () => {
           <div className="flex flex-col gap-4">
             <Link
               href="/home"
-              className="flex justify-start items-center text-white font-bold gap-1 "
+              className="flex justify-start items-center text-black font-bold gap-1 "
             >
               <div className=" p-1 hover:bg-gray-400 rounded-xl">
                 <PlusCircleIcon />
               </div>
-              <p className="text-base md:text-lg lg:text-xl">Start New Chat</p>
+              <p className="text-base lg:text-lg">Start New Chat</p>
             </Link>
-            <div className="flex flex-col gap-4 text-white">
-              <p className=" font-bold text-base md:text-lg lg:text-xl text-gray-400">
-                Recent Chats
+            <div className="flex flex-col gap-4 text-black">
+              <p className=" font-bold text-sm lg:text-lg text-gray-800">
+                RECENT CHATS
               </p>
 
               {Array.isArray(chats) &&
@@ -91,7 +91,7 @@ const SideBar = () => {
                       className="flex gap-3 justify-between text-nowrap overflow-hidden w-60"
                       href={`/home/chat/${chat.chatId}`}
                     >
-                      <p className="flex items-start text-sm md:text-base lg:text-lg">
+                      <p className="flex items-start text-sm lg:text-lg">
                         {chat.chatName}
                       </p>
                     </Link>

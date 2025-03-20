@@ -83,7 +83,7 @@ export default function ChatForm(className) {
           </h1>
         )}
       </div>
-      <div className=" w-[90dvw] xl:w-[45dvw] flex items-center px-6 ">
+      <div className=" w-[90dvw] xl:w-[45dvw] flex items-center px-6 mb-6">
         <form
           onSubmit={handleSend}
           className=" flex w-full items-center space-x-2"

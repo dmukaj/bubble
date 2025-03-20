@@ -69,18 +69,18 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col mt-20 items-center">
-      <div className="flex flex-col items-center bg-accent pb-4 lg:h-[80dvh] xl:w-[55dvw] w-[90dvw] rounded-lg">
+      <div className="flex flex-col items-center pb-4 lg:h-[80dvh] xl:w-[60dvw] w-[90dvw] rounded-lg">
         <section className="flex flex-col items-center xl:w-[80vw] lg:w-[70vw] sm:w-[88%] h-[90vh] text:xs md:text-base lg:text-lg">
-          <div className="flex-1 xl:w-[50dvw] w-[85dvw] overflow-y-auto py-4">
-            <div>
+          <div className="flex-1 xl:w-[50dvw] w-[90dvw] overflow-y-auto p-4">
+            <div className="flex flex-col gap-2">
               {!loading &&
                 messages.length > 0 &&
                 messages.slice(0, -1).map((message, index) => (
-                  <div key={index}>
+                  <div key={index} className="flex flex-col mb-6">
                     <div
                       key={index}
                       className={cn(
-                        "flex w-max max-w-[60%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base",
+                        "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base",
                         message.role === "user"
                           ? "ml-auto bg-primary text-primary-foreground"
                           : "bg-muted"
@@ -97,7 +97,7 @@ const Chat = () => {
                   </div>
                 ))}
               {!loading && currentTypingMessage ? (
-                <p className="flex w-max max-w-[60%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base bg-white text-black">
+                <p className="flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base bg-accent text-black">
                   {currentTypingMessage}
                 </p>
               ) : (
@@ -111,7 +111,7 @@ const Chat = () => {
           <ChatForm
             messages={messages}
             setMessages={setMessages}
-            className=" xl:w-[50dvw] w-[85dvw]"
+            className=" xl:w-[50dvw] w-[90dvw]"
           />
         </section>
       </div>

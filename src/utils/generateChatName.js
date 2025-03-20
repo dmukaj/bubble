@@ -9,8 +9,7 @@ export async function generateChatName(firstMessage, file) {
         /(hello|hi|hey|howdy|good morning|good afternoon|good evening|morning|afternoon|evening|hello|hi|hey|howdy|good morning|good afternoon|good evening|morning|afternoon|evening)/i,
         "Greetings"
       )
-      .trim()
-      .toUpperCase();
+      .trim();
     // Limit the name to a ceratin length
     return cleanedMessage.split(" ").slice(0, 5).join(" ") || "New Chat";
   }
