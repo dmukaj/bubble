@@ -67,6 +67,15 @@ const Chat = () => {
     checkIfChatExists(messages);
   }, [messages]);
 
+  const formatMessage = (text) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bold
+      .replace(/\*(.*?)\*/g, "<em>$1</em>") // Italics
+      .replace(/^- (.*?)/gm, "<li>$1</li>") // Bullets
+      .replace(/\n\n/g, "</p><p>") // Paragraphs
+      .replace(/\n/g, "<br />"); // Line breaks inside paragraphs
+  };
+
   return (
     <div className="flex flex-col mt-20 items-center">
       <div className="flex flex-col items-center pb-4 lg:h-[80dvh] xl:w-[60dvw] w-[90dvw] rounded-lg">
@@ -85,8 +94,11 @@ const Chat = () => {
                           ? "ml-auto bg-primary text-primary-foreground"
                           : "bg-muted"
                       )}
+                      dangerouslySetInnerHTML={{
+                        __html: `<p>${formatMessage(message.content)}</p>`,
+                      }}
                     >
-                      {message.content}
+                      {/* {message.content} */}
                     </div>
 
                     {message.file && (
@@ -97,8 +109,13 @@ const Chat = () => {
                   </div>
                 ))}
               {!loading && currentTypingMessage ? (
-                <p className="flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base bg-accent text-black">
-                  {currentTypingMessage}
+                <p
+                  className="flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-2 py-1 text-xs md:text-base bg-accent text-black"
+                  dangerouslySetInnerHTML={{
+                    __html: `<p>${formatMessage(currentTypingMessage)}</p>`,
+                  }}
+                >
+                  {/* {currentTypingMessage} */}
                 </p>
               ) : (
                 <div>Loading...</div>
